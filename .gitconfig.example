@@ -1,0 +1,8 @@
+# vim:tw=0:ts=2:sw=2:et:norl:ft=gitconfig
+
+[interactive]
+
+  # Add a visual break (colorful flower bed)
+  # between interactive patch hunks.
+  diffFilter = diff-filter-garden
+
