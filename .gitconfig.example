@@ -1,3 +1,16 @@
 # vim:tw=0:ts=2:sw=2:et:norl:ft=gitconfig
+
+# USAGE: You could copy the 'interactive' section below to your
+#        own ~/.gitconfig, and then run `git add -p ...`.
+#
+#        Or, you could copy this file somewhere and include it
+#        from your own ~/.gitconfig. E.g.,
+#
+#          $ cp .gitconfig.example /path/to/veggie-patch.gitconfig
+#          $ cat <<EOF >> ~/.gitconfig
+#          [include]
+#            path = /path/to/veggie-patch.gitconfig
+#          EOF
+
 [interactive]
   diffFilter = diff-filter-garden
