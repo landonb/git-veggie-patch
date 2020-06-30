@@ -96,20 +96,20 @@ expose_biz_vars () {
   #
   #      We could look specifically for that color, e.g.,
   #
-  #        GIT_FLU_HUNK_HEADER=${GIT_FLU_HUNK_HEADER:-'\x1b\[1;35m@@ '}
+  #        VEGGIE_PATCH_HUNK_HEADER=${VEGGIE_PATCH_HUNK_HEADER:-'\x1b\[1;35m@@ '}
   #
   #      but we can also regex on all foreground colors: 30m→37m, and 90m→97m.
   #
   #      HINT: You can test changing this from the CLI.
   #      E.g., if your hunk header is blue, you could confirm:
   #
-  #        GIT_FLU_HUNK_HEADER='\x1b\[1;34m@@ ' git add -p
-  GIT_FLU_8BIT_CLR_RE='\x1b\[1;[39][0-7]m'
-  GIT_FLU_HUNK_HEADER=${GIT_FLU_HUNK_HEADER:-"(${GIT_FLU_8BIT_CLR_RE})?@@ "}
+  #        VEGGIE_PATCH_HUNK_HEADER='\x1b\[1;34m@@ ' git add -p
+  VEGGIE_PATCH_8BIT_CLR_RE='\x1b\[1;[39][0-7]m'
+  VEGGIE_PATCH_HUNK_HEADER=${VEGGIE_PATCH_HUNK_HEADER:-"(${VEGGIE_PATCH_8BIT_CLR_RE})?@@ "}
 
   # YOU: Set this to false if you don't want the `a/` and `b/` prefixes
   #      removed from the `---` and `+++` chunk headers.
-  GIT_FLU_STRIP_AB=true
+  VEGGIE_PATCH_STRIP_AB=true
 
   # YOU: Choose how to color the flowers.
   #      Choices:
@@ -118,9 +118,9 @@ expose_biz_vars () {
   #        'randril'  # Randomly choosees either 'rainbro' or 'flowers'.
   # - (lb): 'rainbro' was the (easy) initial implementation. Looks nice/fine.
   #         But 'flowers' is wicked classier.
-  # GIT_FLU_CLR_AI='rainbro'
-  # GIT_FLU_CLR_AI='randril'
-  GIT_FLU_CLR_AI='flowers'
+  # VEGGIE_PATCH_CLR_AI='rainbro'
+  # VEGGIE_PATCH_CLR_AI='randril'
+  VEGGIE_PATCH_CLR_AI='flowers'
 }
 
 # ***
@@ -234,8 +234,8 @@ run_sed_injection () {
 
   # Setup the coloring algorithm
   local clr_ai='rainbro'
-  if [[ "${GIT_FLU_CLR_AI}" == 'flowers' ]] \
-     || ( [[ "${GIT_FLU_CLR_AI}" == 'randril' ]] \
+  if [[ "${VEGGIE_PATCH_CLR_AI}" == 'flowers' ]] \
+     || ( [[ "${VEGGIE_PATCH_CLR_AI}" == 'randril' ]] \
           && [[ $(($RANDOM % 2)) -eq 0 ]] ) \
   ; then
     clr_ai='flowers'
@@ -295,7 +295,7 @@ run_sed_injection () {
   #      the prefixes in the '---' and '+++' lines that I want to remove,
   #      to make copy-paste of those paths easier.
   #      - tl;dr: This strips the 'a/' and 'b/' prefixes from 'diff --git a/... b/...'
-  #  local git_diff="s#^((${GIT_FLU_8BIT_CLR_RE})?diff --git) a/(.*) b/(.*)#\\1 \\3 \\4#g"
+  #  local git_diff="s#^((${VEGGIE_PATCH_8BIT_CLR_RE})?diff --git) a/(.*) b/(.*)#\\1 \\3 \\4#g"
   #  ...
   #  /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${git_diff}"
 
@@ -312,12 +312,12 @@ run_sed_injection () {
   #  /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${stalk_re}"
 
   local the_garden="${blank}${hrule}${blank}"
-  local garden_plot="s#^(${GIT_FLU_HUNK_HEADER}.*)#${the_garden}\\1#g"
+  local garden_plot="s#^(${VEGGIE_PATCH_HUNK_HEADER}.*)#${the_garden}\\1#g"
 
-  local prefix_a="s#^((${GIT_FLU_8BIT_CLR_RE})?--- )a/#\\1#g"
-  local prefix_b="s#^((${GIT_FLU_8BIT_CLR_RE})?\+\+\+ )b/#\\1#g"
+  local prefix_a="s#^((${VEGGIE_PATCH_8BIT_CLR_RE})?--- )a/#\\1#g"
+  local prefix_b="s#^((${VEGGIE_PATCH_8BIT_CLR_RE})?\+\+\+ )b/#\\1#g"
 
-  if ! ${GIT_FLU_STRIP_AB:-true}; then
+  if ! ${VEGGIE_PATCH_STRIP_AB:-true}; then
     /bin/sed -E -e "${garden_plot}"
   else
     /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}"
