@@ -18,7 +18,7 @@ on Tally Bark.
 SETUP
 #####
 
-`Copy from <https://github.com/landonb/git-veggie-patch/blob/master/.gitconfig.example#L2-L3>`__
+`Copy from <https://github.com/landonb/git-veggie-patch/blob/release/.gitconfig.example#L2-L3>`__
 ``.gitconfig.example`` to your user's ``~/.gitconfig``,
 or run the command::
 
