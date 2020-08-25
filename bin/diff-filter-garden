@@ -79,7 +79,7 @@
 #
 #          This adds a blue-colored '### ' prefix to every line:
 #
-#            diffFilter = "/bin/sed -E 's/(.*)/\\x1b[1;34m###\\x1b[0m \\1/g'"
+#            diffFilter = "/usr/bin/env sed -E 's/(.*)/\\x1b[1;34m###\\x1b[0m \\1/g'"
 
 # ***
 
@@ -251,8 +251,8 @@ run_sed_injection () {
   local grd_clr="$(random_green)"
 
   # Format the box rows (which are just block symbols we colorize).
-  local boxl_row="$(printf "%${boxl_ncols}s" | /bin/sed -E 's/ /█/g')"
-  local boxr_row="$(printf "%${boxr_ncols}s" | /bin/sed -E 's/ /█/g')"
+  local boxl_row="$(printf "%${boxl_ncols}s" | /usr/bin/env sed -E 's/ /█/g')"
+  local boxr_row="$(printf "%${boxr_ncols}s" | /usr/bin/env sed -E 's/ /█/g')"
 
   local hrule=''
   local tensity=5
@@ -297,7 +297,7 @@ run_sed_injection () {
   #      - tl;dr: This strips the 'a/' and 'b/' prefixes from 'diff --git a/... b/...'
   #  local git_diff="s#^((${VEGGIE_PATCH_8BIT_CLR_RE})?diff --git) a/(.*) b/(.*)#\\1 \\3 \\4#g"
   #  ...
-  #  /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${git_diff}"
+  #  /usr/bin/env sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${git_diff}"
 
   # MEH: We could color the plant stems all the same color, but I didn't
   #      find that appealing. Also, because we change the color code, the
@@ -309,7 +309,7 @@ run_sed_injection () {
   #  local stm_clr="$(random_tc)"
   #  local stalk_re="s/(${STEM_SET})/${stm_clr}\\1${rst}/g"
   #  ...
-  #  /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${stalk_re}"
+  #  /usr/bin/env sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${stalk_re}"
 
   local the_garden="${blank}${hrule}${blank}"
   local garden_plot="s#^(${VEGGIE_PATCH_HUNK_HEADER}.*)#${the_garden}\\1#g"
@@ -318,9 +318,9 @@ run_sed_injection () {
   local prefix_b="s#^((${VEGGIE_PATCH_8BIT_CLR_RE})?\+\+\+ )b/#\\1#g"
 
   if ! ${VEGGIE_PATCH_STRIP_AB:-true}; then
-    /bin/sed -E -e "${garden_plot}"
+    /usr/bin/env sed -E -e "${garden_plot}"
   else
-    /bin/sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}"
+    /usr/bin/env sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}"
   fi
 }
 
