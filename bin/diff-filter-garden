@@ -224,7 +224,7 @@ run_sed_injection () {
   # being ROC a titch).
   local boxl_ncols=$((${boxes_ncols} - ${boxr_ncols} - 3))
 
-  # Sanity check!
+  # Reality check!
   if [ ${boxl_ncols} -lt 0 ] || [ ${boxr_ncols} -lt 0 ]; then
     # Terminal too narrow. Return falsey and caller will just `cat`.
     return 1
