@@ -2,7 +2,7 @@
 # vim:tw=0:ts=2:sw=2:et:norl:ft=bash
 # Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
 # Project: https://github.com/landonb/git-veggie-patch#🥦
-# Copyright © 2020 Landon Bouma. All rights reserved.
+# Copyright © 2020, 2022 Landon Bouma. All rights reserved.
 # License: MIT. Please find more in the LICENSE file.
 
 # USAGE: Wire this script into your user's PATH, and then update
@@ -54,6 +54,8 @@
 #         Except the script uses color, so it looks a little better than this!!
 
 # ALERT: Because `readarray`, this script is not POSIX-compliant.
+# - 2022-10-25: I POSIX-ified `readarray` away, but unsure if POSIX-compliant now.
+#   - TRYME: Run via (da)sh and Bash v3 and find out...
 
 # M.E.H: Too bad I can't post a solution to this person's reddit question!
 #        ("This thread is archived", typical loaf move!)
@@ -126,7 +128,6 @@ expose_biz_vars () {
 # ***
 
 # Just to be clear, the garden setup populates 2 script vars.
-declare JOANS_GARDEN
 declare -a FLOWER_BED
 
 # (lb): I replaced backward slashes from the original artwork (and
@@ -135,18 +136,28 @@ declare -a FLOWER_BED
 # flower in each row. And as you'll see later, we rely on a static
 # column range for each flower to be able to color them separately.
 tend_your_own_garden () {
+  # TOO_BASHY: We cannot be POSIX-compliant with multiline input, e.g.,
+  #   JOANS_GARDEN='
+  #      @@@
+  #       @
+  #   '
+  #   readarray -t FLOWER_BED <<<"$JOANS_GARDEN"
+  #   # Too make the variable more readable in code, there's a newline
+  #   # immediately after the variable name=', which we remove here.
+  #   FLOWER_BED=("${FLOWER_BED[@]:1}")
+  # So we'll build this array entry-by-entry.
+
   # Flower garden by Joan G. Stark [jgs].
   #   https://www.asciiart.eu/plants/flowers
-  JOANS_GARDEN='
-                   _                                             
-                 _(_)_                           wWWWw   _       
-     @@@@       (_)@(_)    vVVVv     _     @@@@  (___) _(_)_     
-    @@()@@ wWWWw  (_)╲     (___)   _(_)_  @@()@@   Y  (_)@(_)    
-     @@@@  (___)     `│╱     Y    (_)@(_)  @@@@   ╲│╱   (_)╲     
-      ╱      Y       ╲│     ╲│╱    ╱(_)    ╲│      │╱      │     
-   ╲ │     ╲ │╱       │ ╱  ╲ │ ╱  ╲│╱       │╱    ╲│      ╲│╱    
-   ╲╲│╱╱   ╲╲│╱╱   ╲╲╲│╱╱ ╲╲╲│╱╱╱ ╲│╱╱╱  ╲╲╲│╱╱  ╲╲│╱╱  ╲╲╲│╱╱   
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
+  FLOWER_BED+=('                   _                                             ')
+  FLOWER_BED+=('                 _(_)_                           wWWWw   _       ')
+  FLOWER_BED+=('     @@@@       (_)@(_)    vVVVv     _     @@@@  (___) _(_)_     ')
+  FLOWER_BED+=('    @@()@@ wWWWw  (_)╲     (___)   _(_)_  @@()@@   Y  (_)@(_)    ')
+  FLOWER_BED+=('     @@@@  (___)     `│╱     Y    (_)@(_)  @@@@   ╲│╱   (_)╲     ')
+  FLOWER_BED+=('      ╱      Y       ╲│     ╲│╱    ╱(_)    ╲│      │╱      │     ')
+  FLOWER_BED+=('   ╲ │     ╲ │╱       │ ╱  ╲ │ ╱  ╲│╱       │╱    ╲│      ╲│╱    ')
+  FLOWER_BED+=('   ╲╲│╱╱   ╲╲│╱╱   ╲╲╲│╱╱ ╲╲╲│╱╱╱ ╲│╱╱╱  ╲╲╲│╱╱  ╲╲│╱╱  ╲╲╲│╱╱   ')
+  FLOWER_BED+=('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
   # Col. counting... so we can assigns colors to column ranges.
   # 4567890123456789012345678901234567890123456789012345678901234
   #    3-9 11-15    15-24   26-32   34-40  41-47 49-53   54-61
@@ -154,12 +165,6 @@ tend_your_own_garden () {
   # List the characters used to make the stems, should we want to
   # match them later (say, to color the stems all the same color).
   STEM_SET='[`│╱Y╲]'
-
-  # NOTE: readarray not too portable. Very Bashy.
-  readarray -t FLOWER_BED <<<"$JOANS_GARDEN"
-  # Too make the variable more readable in code, there's a newline
-  # immediately after the variable name=', which we remove here.
-  FLOWER_BED=("${FLOWER_BED[@]:1}")
 }
 
 # ***
