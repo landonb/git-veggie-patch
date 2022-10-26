@@ -17,3 +17,4 @@
   #
   # Add a visual break (colorful flower bed) between interactive patch hunks.
   diffFilter = diff-filter-garden
+
