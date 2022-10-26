@@ -316,6 +316,13 @@ run_sed_injection () {
   #  ...
   #  /usr/bin/env sed -E -e "${garden_plot}" -e "${prefix_a}" -e "${prefix_b}" -e "${stalk_re}"
 
+  # HINT: If you need help debugging, dump the output to a text file to
+  #       look at it. E.g., uncomment the following:
+  #
+  #         tee git-interactive-output | cat && return
+  #
+  #       And then run `git add -p`, Ctrl-c, and `view git-interactive-output`.
+
   local the_garden="${blank}${hrule}${blank}"
   local garden_plot="s#^(${VEGGIE_PATCH_HUNK_HEADER}.*)#${the_garden}\\1#g"
 
